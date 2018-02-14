@@ -1,0 +1,7 @@
+[run]
+omit=
+	setup.py
+	manage.py
+	*/test/*
+	project_name/settings/*
+	project_name/wsgi.py
