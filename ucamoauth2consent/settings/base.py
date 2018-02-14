@@ -26,7 +26,9 @@ INSTALLED_APPS = [
 
     'automationcommon',
     'ucamwebauth',
+    'ucamprojectlight',
 
+    'ravenconsent',
 ]
 
 #: Installed middleware

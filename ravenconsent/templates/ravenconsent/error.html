@@ -1,0 +1,30 @@
+{% extends 'ucamprojectlight.html' %}
+
+{% block head_title %}Error logging in{% endblock %}
+
+{% block static_breadcrumbs %}
+<li>
+  <a href="http://www.cam.ac.uk/">University of Cambridge</a>
+</li>
+{% endblock %}
+
+{% block site_name %}Login Error{% endblock %}
+
+{% block search_bar %}{% endblock %}
+
+{% block campl_tabs_header%}{% endblock %}
+
+{% block local_footer %}{% endblock %}
+
+{% block page_content %}
+<div class="campl-content-container">
+  <p>
+    An error occurred when attempting to log you in.  If reporting the error,
+    please include the following information:
+  </p>
+
+  <p><strong>Error code:</strong> {{ error }}</p>
+
+  <p><strong>Error description:</strong> {{ error_description }}</p>
+</div>
+{% endblock %}

@@ -2,6 +2,6 @@
 omit=
 	setup.py
 	manage.py
-	*/test/*
+	*/tests/*
 	ucamoauth2consent/settings/*
 	ucamoauth2consent/wsgi.py
