@@ -18,8 +18,8 @@ backend by setting ``DJANGO_DB_BACKEND``.
 Default settings
 ````````````````
 
-The default settings are given in the :py:mod:`project_name.settings.base` module:
+The default settings are given in the :py:mod:`ucamoauth2consent.settings.base` module:
 
-.. automodule:: project_name.settings.base
+.. automodule:: ucamoauth2consent.settings.base
     :members:
     :member-order: bysource

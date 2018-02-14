@@ -8,13 +8,13 @@ WORKDIR /usr/src/app
 ADD requirements*.txt ./
 RUN pip install -r ./requirements_developer.txt
 
-# The project_name source will be mounted here as a volume
+# The ucamoauth2consent source will be mounted here as a volume
 VOLUME /usr/src/app
 
 # By default, use the Django development server to serve the application and use
 # developer-specific settings.
 #
 # *DO NOT DEPLOY THIS TO PRODUCTION*
-ENV DJANGO_SETTINGS_MODULE project_name.settings_developer
+ENV DJANGO_SETTINGS_MODULE ucamoauth2consent.settings_developer
 ENTRYPOINT ["python", "manage.py"]
 CMD ["runserver", "0.0.0.0:8080"]

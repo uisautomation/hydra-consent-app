@@ -41,7 +41,7 @@ MIDDLEWARE = [
 ]
 
 #: Root URL patterns
-ROOT_URLCONF = 'project_name.urls'
+ROOT_URLCONF = 'ucamoauth2consent.urls'
 
 #: Template loading
 TEMPLATES = [
@@ -61,7 +61,7 @@ TEMPLATES = [
 ]
 
 #: WSGI
-WSGI_APPLICATION = 'project_name.wsgi.application'
+WSGI_APPLICATION = 'ucamoauth2consent.wsgi.application'
 
 
 #: Database configuration. The default settings allow configuration of the database from

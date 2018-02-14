@@ -1,7 +1,7 @@
 # Install the main set of requirements
 -r requirements.txt
 
-# Additional requirements useful for developers of the project_name
+# Additional requirements useful for developers of the ucamoauth2consent
 
 # Django debugging
 django-debug-toolbar

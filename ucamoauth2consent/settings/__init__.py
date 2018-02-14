@@ -1,5 +1,5 @@
 """
-The default :py:mod:`project_name.settings` module contains settings which are
+The default :py:mod:`ucamoauth2consent.settings` module contains settings which are
 common to most deployment environments.
 
 """

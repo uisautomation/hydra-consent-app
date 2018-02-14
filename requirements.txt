@@ -1,4 +1,4 @@
-# Requirements for the project_name itself
+# Requirements for the ucamoauth2consent itself
 django>=2.0
 psycopg2
 # explicitly specify django-automationcommon's git repo since changes in

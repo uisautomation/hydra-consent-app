@@ -1,4 +1,4 @@
-# Django Boilerplate project_name
+# Django Boilerplate ucamoauth2consent
 
 This is a django startproject template for django projects in the University Information Services.
 
