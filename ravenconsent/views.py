@@ -30,7 +30,13 @@ def _consent_requiring_login(request):
     if unverified_consent_id is None:
         return render_error(request, 'missing_consent', 'No consent id was provided')
 
-    # If consent looks strange, early out
+    # If consent looks strange, early out. Recall that the consent id is user-controlled and can be
+    # presented directly to the consent app. Later on we use it to build the URL to retrieve the
+    # consent request and the accept/reject URL. In all cases the consent id forms part of the URL
+    # path. To avoid the chance of an attacker managing to get the consent app to fetch an
+    # unexpected URL, disallow slashes in the provided consent id. Otherwise a user could cause the
+    # consent app to fetch arbitrary URLs on the hydra app by, e.g., specifying a consent id of
+    # "../../some/other/path" or similar.
     if '/' in unverified_consent_id:
         return render_error(request, 'bad_consent', 'A bad consent id was provided')
 
