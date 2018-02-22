@@ -40,7 +40,14 @@ def _consent_requiring_login(request):
     except Exception as e:
         return render_error(request, 'cannot_verify_consent', str(e))
 
-    # Implicitly grant it
+    # For the moment we implicitly grant all requested scopes with no further verification or user
+    # input. This goes against the grain of OAuth2 in general but, for the moment, the fact we are
+    # running an OAuth2 server is an implementation detail and we'd like to preserve a traditional
+    # Raven login flow.
+    #
+    # Should the use of this service become more widespread, we should re-visit this. We shall also
+    # need to re-visit this before Hydra v1 since Hydra will start enforcing some sort of scope
+    # grant flow. See https://github.com/ory/hydra/issues/772.
     return hydra.resolve_request(
         request, consent, hydra.Decision.ACCEPT, grant_scopes=consent['requestedScopes'])
 
