@@ -1,5 +1,8 @@
 # Hydra Consent App for the University of Cambridge
 
+[![Build Status](https://travis-ci.org/uisautomation/hydra-consent-app.svg?branch=master)](https://travis-ci.org/uisautomation/hydra-consent-app)
+[![codecov](https://codecov.io/gh/uisautomation/hydra-consent-app/branch/master/graph/badge.svg)](https://codecov.io/gh/uisautomation/hydra-consent-app)
+
 This repository contains a "consent app" implementation for the
 [Hydra](https://github.com/ory/hydra) OAuth2 server which integrates
 [Raven](https://raven.cam.ac.uk) SSO.
