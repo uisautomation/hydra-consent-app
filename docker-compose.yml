@@ -6,12 +6,12 @@ services:
       context: .
       dockerfile: compose/Dockerfile
     expose:
-      - "8080"
+      - "8090"
     ports:
-      - "8080:8080"
+      - "8090:8080"
     depends_on:
       - "db"
-      - "debugsmtp"
+      - "hydra"
     # For devserver, mount the local directory inside the container as a volume
     # to allow local changes to be reflected without having to re-build the
     # container.
@@ -47,10 +47,22 @@ services:
     image: postgres
     env_file:
       - compose/base.env
-  debugsmtp:
-    image: mailhog/mailhog
+  hydra:
+    image: oryd/hydra:v0.11.1-alpine
+    entrypoint: ["/tmp/start-hydra.sh"]
     ports:
-      - "8025:8025"
+      - "4444:4444"
+      - "4445:4445"
+    env_file:
+      - compose/hydra.env
+    depends_on:
+      - hydradb
+    volumes:
+      - "./compose/start-hydra.sh:/tmp/start-hydra.sh/:ro"
+  hydradb:
+    image: postgres
+    env_file:
+      - compose/hydra.env
 
 volumes:
   # A persistent volume for tox to store its stuff. This allows caching of

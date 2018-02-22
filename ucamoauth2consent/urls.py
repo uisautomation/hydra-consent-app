@@ -30,6 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('ucamwebauth.urls')),
     path('status', automationcommon.views.status, name='status'),
+    path('', include('ravenconsent.urls')),
 ]
 
 # Selectively enable django debug toolbar URLs. Only if the toolbar is

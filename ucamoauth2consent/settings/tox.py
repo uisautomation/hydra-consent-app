@@ -14,7 +14,7 @@ from .base import *  # noqa: F401, F403
 
 #: The default test runner is changed to one which captures stdout and stderr
 #: when running tests.
-TEST_RUNNER = 'ucamoauth2consent.test.runner.BufferedDiscoverRunner'
+TEST_RUNNER = 'ucamoauth2consent.tests.runner.BufferedDiscoverRunner'
 
 #: Static files are collected into a directory determined by the tox
 #: configuration. See the tox.ini file.
@@ -28,3 +28,8 @@ for v in _db_copy.values():
         v['PASSWORD'] = '<redacted>'
 print('Databases:')
 print(json.dumps(_db_copy, indent=2))
+
+CONSENT_CLIENT_ID = 'mockclientid'
+CONSENT_CLIENT_SECRET = 'mockclientsecret'
+HYDRA_TOKEN_ENDPOINT = 'https://hydra.invalid/oauth2/token'
+HYDRA_CONSENT_REQUESTS_ENDPOINT = 'https://hydra.invalid/oauth2/consent/requests/'

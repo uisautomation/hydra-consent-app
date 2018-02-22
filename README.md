@@ -1,9 +1,23 @@
-# Django Boilerplate ucamoauth2consent
+# Hydra Consent App for the University of Cambridge
 
-This is a django startproject template for django projects in the University Information Services.
+This repository contains a "consent app" implementation for the
+[Hydra](https://github.com/ory/hydra) OAuth2 server which integrates
+[Raven](https://raven.cam.ac.uk) SSO.
 
-To use it, simply execute the following command:
+See the [documentation](https://uisautomation.github.io/hydra-consent-app/) for
+information about how to get a developer instance running.
 
+## Quick test
+
+As a quick test, you can spin up the consent app and try issuing a token with
+the following:
+
+```console
+$ docker-compose up devserver
 ```
-> django-admin startproject --template https://github.com/uisautomation/django-boilerplate/archive/master.zip --extension=py,md,html,txt name-of-project name-of-directory
+
+Then, in another terminal:
+
+```console
+$ ./scripts/create-token.sh
 ```

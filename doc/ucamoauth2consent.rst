@@ -38,10 +38,10 @@ Custom test suite runner
 
 The :any:`test suite settings <settings_testsuite>` overrides the
 ``TEST_RUNNER`` setting to point to
-:py:class:`~ucamoauth2consent.test.runner.BufferedTextTestRunner`. This runner captures
+:py:class:`~ucamoauth2consent.tests.runner.BufferedTextTestRunner`. This runner captures
 output to stdout and stderr and only reports the output if a test fails. This
 helps make our tests a little less noisy.
 
-.. autoclass:: ucamoauth2consent.test.runner.BufferedDiscoverRunner
+.. autoclass:: ucamoauth2consent.tests.runner.BufferedDiscoverRunner
 
-.. autoclass:: ucamoauth2consent.test.runner.BufferedTextTestRunner
+.. autoclass:: ucamoauth2consent.tests.runner.BufferedTextTestRunner

@@ -88,6 +88,16 @@ performed as usual:
 
     $ python manage.py migrate
 
+Issue a token
+`````````````
+
+Once the consent app is running you should be able to issue a token for a
+client:
+
+.. code-block:: bash
+
+    $ ./scripts/create-token.sh
+
 Next steps
 ``````````
 

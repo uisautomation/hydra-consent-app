@@ -7,6 +7,9 @@ psycopg2
 # in the VCS URL.
 git+https://github.com/uisautomation/django-automationcommon@master#egg=django-automationcommon
 django-ucamwebauth>=1.4.5
+django-ucamprojectlight
+requests-oauthlib
+python-dateutil
 
 # For an improved manage.py shell experience
 ipython
@@ -16,3 +19,4 @@ tox
 
 # Serving
 gunicorn
+oauthlib
