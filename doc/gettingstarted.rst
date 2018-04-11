@@ -92,11 +92,7 @@ Issue a token
 `````````````
 
 Once the consent app is running you should be able to issue a token for a
-client:
-
-.. code-block:: bash
-
-    $ ./scripts/create-token.sh
+client as outlined in :any:`tokens`.
 
 Next steps
 ``````````
