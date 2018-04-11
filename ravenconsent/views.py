@@ -16,13 +16,6 @@ def consent(request):
     if 'error' in request.GET:
         return render_error_from_request(request)
 
-    # Otherwise, delegate response to a view which requires login
-    return _consent_requiring_login(request)
-
-
-@login_required
-def _consent_requiring_login(request):
-    """Handle parts of the consent flow which require a user be logged in."""
     # Get consent from request
     unverified_consent_id = request.GET.get('consent')
 
@@ -46,6 +39,13 @@ def _consent_requiring_login(request):
     except Exception as e:
         return render_error(request, 'cannot_verify_consent', str(e))
 
+    # Otherwise, delegate response to a view which requires login
+    return _consent_requiring_login(request, consent)
+
+
+@login_required
+def _consent_requiring_login(request, consent):
+    """Handle parts of the consent flow which require a user be logged in."""
     # For the moment we implicitly grant all requested scopes with no further verification or user
     # input. This goes against the grain of OAuth2 in general but, for the moment, the fact we are
     # running an OAuth2 server is an implementation detail and we'd like to preserve a traditional
@@ -54,6 +54,16 @@ def _consent_requiring_login(request):
     # Should the use of this service become more widespread, we should re-visit this. We shall also
     # need to re-visit this before Hydra v1 since Hydra will start enforcing some sort of scope
     # grant flow. See https://github.com/ory/hydra/issues/772.
+    return _grant_request(request, consent)
+
+
+def _grant_request(request, consent):
+    """
+    Helper function to unconditionally grant a consent request and all the scopes.
+
+    :returns: redirect back to Hydra server
+    :rtype: django.http.response.Response
+    """
     return hydra.resolve_request(
         request, consent, hydra.Decision.ACCEPT, grant_scopes=consent['requestedScopes'])
 
