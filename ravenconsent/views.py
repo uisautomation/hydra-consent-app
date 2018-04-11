@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -39,6 +40,13 @@ def consent(request):
     except Exception as e:
         return render_error(request, 'cannot_verify_consent', str(e))
 
+    # With CONSENT_PROMPT_NONE_SCOPE, instead of redirecting to the account login page, simply
+    # reject the request out of hand if the current user is not authenticated.
+    requested_scopes = consent.get('requestedScopes', [])
+    if (settings.CONSENT_PROMPT_NONE_SCOPE in requested_scopes
+            and not request.user.is_authenticated):
+        return _reject_request(request, consent, 'user not logged in')
+
     # Otherwise, delegate response to a view which requires login
     return _consent_requiring_login(request, consent)
 
@@ -66,6 +74,16 @@ def _grant_request(request, consent):
     """
     return hydra.resolve_request(
         request, consent, hydra.Decision.ACCEPT, grant_scopes=consent['requestedScopes'])
+
+
+def _reject_request(request, consent, reason):
+    """
+    Helper function to unconditionally reject a consent request.
+
+    :returns: redirect back to Hydra server
+    :rtype: django.http.response.Response
+    """
+    return hydra.resolve_request(request, consent, hydra.Decision.REJECT, reason=reason)
 
 
 def render_error_from_request(request):

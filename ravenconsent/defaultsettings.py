@@ -41,3 +41,10 @@ Endpoint which forms the base URL for consent requests. For example, if hydra is
 ``http://hydra.invalid/``, this should be ``http://hydra.invalid/oauth2/consent/requests/``.
 
 """
+
+CONSENT_PROMPT_NONE_SCOPE = 'prompt:none'
+"""
+Consent requests with this scope are either granted or denied based upon whether the user is
+authenticated or not and will not show the Raven login if the user is not currently authenticated.
+
+"""

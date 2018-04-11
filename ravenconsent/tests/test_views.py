@@ -1,8 +1,10 @@
 import unittest.mock as mock
 
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.test import TestCase
+from django.test.utils import override_settings
 from django.urls import reverse
 
 from ravenconsent import hydra
@@ -76,6 +78,27 @@ class NoUserConsentTests(TestCase, ConsentParameterTestMixin):
             retrieve_and_verify_consent.side_effect = lambda _: consent
             r = self.client.get(self.endpoint + '?consent=' + consent['id'])
             self.assertEqual(r.status_code, 302)
+            self.assertTrue(r['Location'].startswith(settings.LOGIN_URL))
+
+    @override_settings(CONSENT_PROMPT_NONE_SCOPE='custom-prompt-none')
+    def test_prompt_none(self):
+        """A valid consent with CONSENT_PROMPT_NONE_SCOPE scope redirects to a deny response."""
+        consent = get_valid_consent(scopes=['a', 'b', settings.CONSENT_PROMPT_NONE_SCOPE])
+        rav_patch = mock.patch('ravenconsent.hydra.retrieve_and_verify_consent')
+        rr_patch = mock.patch('ravenconsent.hydra.resolve_request')
+
+        with rav_patch as retrieve_and_verify_consent, rr_patch as resolve_request:
+            retrieve_and_verify_consent.side_effect = lambda _: consent
+            resolve_request.return_value = HttpResponseRedirect('http://test.invalid/')
+            r = self.client.get(self.endpoint + '?consent=' + consent['id'])
+
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(r['Location'], 'http://test.invalid/')
+
+        # A decision should've been made and that should be a reject
+        resolve_request.assert_called()
+        decision = resolve_request.call_args[0][2]
+        self.assertIs(decision, hydra.Decision.REJECT)
 
 
 class UserConsentTests(TestCase, ConsentParameterTestMixin):
@@ -87,9 +110,18 @@ class UserConsentTests(TestCase, ConsentParameterTestMixin):
         self.endpoint = reverse('consent')
 
     def test_successful_flow(self):
+        self._assert_consent_successful(get_valid_consent())
+
+    @override_settings(CONSENT_PROMPT_NONE_SCOPE='custom-prompt-none')
+    def test_prompt_none(self):
+        """A valid consent with CONSENT_PROMPT_NONE_SCOPE scope succeeds."""
+        self._assert_consent_successful(get_valid_consent(
+            ['a', 'b', settings.CONSENT_PROMPT_NONE_SCOPE]))
+
+    def _assert_consent_successful(self, consent):
+        """Helper to check a valid consent request."""
         rav_patch = mock.patch('ravenconsent.hydra.retrieve_and_verify_consent')
         rr_patch = mock.patch('ravenconsent.hydra.resolve_request')
-        consent = get_valid_consent()
         with rav_patch as retrieve_and_verify_consent, rr_patch as resolve_request:
             retrieve_and_verify_consent.side_effect = lambda _: consent
             resolve_request.return_value = HttpResponseRedirect('http://test.invalid/')
