@@ -3,5 +3,7 @@ omit=
 	setup.py
 	manage.py
 	*/tests/*
+	*/migrations/*
 	ucamoauth2consent/settings/*
 	ucamoauth2consent/wsgi.py
+	.tox/*

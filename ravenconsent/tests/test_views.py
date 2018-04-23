@@ -1,8 +1,10 @@
 import unittest.mock as mock
 
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.test import TestCase
+from django.test.utils import override_settings
 from django.urls import reverse
 
 from ravenconsent import hydra
@@ -17,7 +19,43 @@ class HealthzTests(TestCase):
         self.assertEqual(r.status_code, 200)
 
 
-class NoUserConsentTests(TestCase):
+class ConsentParameterTestMixin:
+    """
+    A mixin class which contains tests for parsing consent parameters. These should pass
+    irrespective of whether a user is logged in.
+
+    """
+    def test_no_consent(self):
+        """If no consent is passed, an error is reported."""
+        # missing consent
+        r = self.client.get(self.endpoint)
+        self.assertEqual(r.status_code, 400)
+        self.assertIn(b'missing_consent', r.content)
+
+    def test_slashes_in_consent(self):
+        """A consent which looks like it may try to confuse our URL concatenation is provided
+        should fail.
+
+        """
+        r = self.client.get(self.endpoint + '?consent=foo%2Fbar')
+        self.assertEqual(r.status_code, 400)
+        self.assertIn(b'bad_consent', r.content)
+
+    def test_invalid_consent(self):
+        """An invalid consent id is not accepted."""
+        rav_patch = mock.patch('ravenconsent.hydra.retrieve_and_verify_consent')
+        consent = get_valid_consent()
+
+        def fail():
+            raise RuntimeError("I don't like your auth")
+
+        with rav_patch as retrieve_and_verify_consent:
+            retrieve_and_verify_consent.side_effect = fail
+            r = self.client.get(self.endpoint + '?consent=' + consent['id'])
+            self.assertEqual(r.status_code, 400)
+
+
+class NoUserConsentTests(TestCase, ConsentParameterTestMixin):
     """Test consent endpoint with no user logged in."""
 
     def setUp(self):
@@ -33,12 +71,37 @@ class NoUserConsentTests(TestCase):
         self.assertIn(b'test_description', r.content)
 
     def test_login_required(self):
-        """Non-error reporting redirects to login."""
-        r = self.client.get(self.endpoint)
+        """A valid consent requires login."""
+        consent = get_valid_consent()
+        rav_patch = mock.patch('ravenconsent.hydra.retrieve_and_verify_consent')
+        with rav_patch as retrieve_and_verify_consent:
+            retrieve_and_verify_consent.side_effect = lambda _: consent
+            r = self.client.get(self.endpoint + '?consent=' + consent['id'])
+            self.assertEqual(r.status_code, 302)
+            self.assertTrue(r['Location'].startswith(settings.LOGIN_URL))
+
+    @override_settings(CONSENT_PROMPT_NONE_SCOPE='custom-prompt-none')
+    def test_prompt_none(self):
+        """A valid consent with CONSENT_PROMPT_NONE_SCOPE scope redirects to a deny response."""
+        consent = get_valid_consent(scopes=['a', 'b', settings.CONSENT_PROMPT_NONE_SCOPE])
+        rav_patch = mock.patch('ravenconsent.hydra.retrieve_and_verify_consent')
+        rr_patch = mock.patch('ravenconsent.hydra.resolve_request')
+
+        with rav_patch as retrieve_and_verify_consent, rr_patch as resolve_request:
+            retrieve_and_verify_consent.side_effect = lambda _: consent
+            resolve_request.return_value = HttpResponseRedirect('http://test.invalid/')
+            r = self.client.get(self.endpoint + '?consent=' + consent['id'])
+
         self.assertEqual(r.status_code, 302)
+        self.assertEqual(r['Location'], 'http://test.invalid/')
+
+        # A decision should've been made and that should be a reject
+        resolve_request.assert_called()
+        decision = resolve_request.call_args[0][2]
+        self.assertIs(decision, hydra.Decision.REJECT)
 
 
-class UserConsentTests(TestCase):
+class UserConsentTests(TestCase, ConsentParameterTestMixin):
     """Test consent endpoint with a user logged in."""
 
     def setUp(self):
@@ -46,25 +109,19 @@ class UserConsentTests(TestCase):
         self.client.force_login(self.user)
         self.endpoint = reverse('consent')
 
-    def test_no_consent(self):
-        """If no consent is passed, an error is reported."""
-        r = self.client.get(self.endpoint)
-        self.assertEqual(r.status_code, 400)
-        self.assertIn(b'missing_consent', r.content)
-
-    def test_slashes_in_consent(self):
-        """A consent which looks like it may try to confuse our URL concatenation is provided
-        should fail.
-
-        """
-        r = self.client.get(self.endpoint + '?consent=foo%2Fbar')
-        self.assertEqual(r.status_code, 400)
-        self.assertIn(b'bad_consent', r.content)
-
     def test_successful_flow(self):
+        self._assert_consent_successful(get_valid_consent())
+
+    @override_settings(CONSENT_PROMPT_NONE_SCOPE='custom-prompt-none')
+    def test_prompt_none(self):
+        """A valid consent with CONSENT_PROMPT_NONE_SCOPE scope succeeds."""
+        self._assert_consent_successful(get_valid_consent(
+            ['a', 'b', settings.CONSENT_PROMPT_NONE_SCOPE]))
+
+    def _assert_consent_successful(self, consent):
+        """Helper to check a valid consent request."""
         rav_patch = mock.patch('ravenconsent.hydra.retrieve_and_verify_consent')
         rr_patch = mock.patch('ravenconsent.hydra.resolve_request')
-        consent = get_valid_consent()
         with rav_patch as retrieve_and_verify_consent, rr_patch as resolve_request:
             retrieve_and_verify_consent.side_effect = lambda _: consent
             resolve_request.return_value = HttpResponseRedirect('http://test.invalid/')
@@ -80,15 +137,3 @@ class UserConsentTests(TestCase):
         args, kwargs = resolve_request.call_args
         self.assertEqual(args[2], hydra.Decision.ACCEPT)
         self.assertEqual(kwargs['grant_scopes'], consent['requestedScopes'])
-
-    def test_invalid_consent(self):
-        rav_patch = mock.patch('ravenconsent.hydra.retrieve_and_verify_consent')
-        consent = get_valid_consent()
-
-        def fail():
-            raise RuntimeError("I don't like your auth")
-
-        with rav_patch as retrieve_and_verify_consent:
-            retrieve_and_verify_consent.side_effect = fail
-            r = self.client.get(self.endpoint + '?consent=' + consent['id'])
-            self.assertEqual(r.status_code, 400)

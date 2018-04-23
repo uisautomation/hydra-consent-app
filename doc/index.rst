@@ -9,6 +9,7 @@ If you don't know where to start then :doc:`the getting started guide
     :caption: Contents
 
     gettingstarted
+    tokens
     developer
     configuration
     ucamoauth2consent

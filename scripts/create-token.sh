@@ -4,6 +4,10 @@
 # testclient application. See ./create-client.sh.
 #
 set -xe
+
+scopes=${1-example}
+
+echo "-- Requesting token with scopes: ${scopes}"
 docker-compose exec hydra hydra token user \
-    --id hydraroot --secret secret \
-    --scopes hydra
+    --id application --secret secret \
+    --scopes "${scopes}"

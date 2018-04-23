@@ -50,8 +50,14 @@ def retrieve_and_verify_consent(consent_id):
     return verify_consent(retrieve_consent(consent_id), consent_id)
 
 
-def resolve_request(request, consent, decision, grant_scopes=[]):
-    """Resolve a consent request and redirect to location in request."""
+def resolve_request(request, consent, decision, grant_scopes=[], reason=None):
+    """
+    Resolve a consent request and redirect to location in request.
+
+    If *reason* is omitted, it defaults to "request was rejected".
+    """
+    reason = reason if reason is not None else 'request was rejected'
+
     if decision not in [Decision.ACCEPT, Decision.REJECT]:
         raise ValueError('Invalid decision: {}'.format(decision))
 
@@ -66,7 +72,7 @@ def resolve_request(request, consent, decision, grant_scopes=[]):
     else:
         response = _request(
             method='PATCH', url=settings.HYDRA_CONSENT_REQUESTS_ENDPOINT + consent_id + '/reject',
-            json={'reason': 'user rejected request'})
+            json={'reason': reason})
 
     response.raise_for_status()
 

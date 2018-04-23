@@ -48,7 +48,7 @@ services:
     env_file:
       - compose/base.env
   hydra:
-    image: oryd/hydra:v0.11.1-alpine
+    image: oryd/hydra:v0.11.12-alpine
     entrypoint: ["/tmp/start-hydra.sh"]
     ports:
       - "4444:4444"
