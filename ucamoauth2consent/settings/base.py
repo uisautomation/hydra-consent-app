@@ -1,4 +1,5 @@
 import os
+import sys
 
 #: Base directory containing the project. Build paths inside the project via
 #: ``os.path.join(BASE_DIR, ...)``.
@@ -22,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',  # use whitenoise even in development
     'django.contrib.staticfiles',
 
     'automationcommon',
@@ -34,6 +36,8 @@ INSTALLED_APPS = [
 #: Installed middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -149,3 +153,31 @@ UCAMWEBAUTH_LOGOUT_REDIRECT = 'https://raven.cam.ac.uk/auth/logout.html'
 
 #: Allow members who are not current members to log in?
 UCAMWEBAUTH_NOT_CURRENT = False
+
+# By default we a) redirect all HTTP traffic to HTTPS, b) set the HSTS header to a maximum age
+# of 1 year (as per the consensus recommendation from a quick Google search) and c) advertise that
+# we are willing to be "preloaded" into Chrome and Firefox's internal list of HTTPS-only sites.
+# Set the DANGEROUS_DISABLE_HTTPS_REDIRECT variable to any non-blank value to disable this.
+if os.environ.get('DANGEROUS_DISABLE_HTTPS_REDIRECT', '') == '':
+    # Exempt the healtch-check endpoint from the HTTP->HTTPS redirect.
+    SECURE_REDIRECT_EXEMPT = ['^healthz/?$']
+
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000  # == 1 year
+    SECURE_HSTS_PRELOAD = True
+else:
+    print('Warning: HTTP to HTTPS redirect has been disabled.', file=sys.stderr)
+
+# We also support the X-Forwarded-Proto header to detect if we're behind a load balancer which does
+# TLS termination for us. In future this setting might need to be moved to settings.docker or to be
+# configured via an environment variable if we want to support a wider range of TLS terminating
+# load balancers.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+CONSENT_CLIENT_ID = os.environ.get('CONSENT_CLIENT_ID', '')
+CONSENT_CLIENT_SECRET = os.environ.get('CONSENT_CLIENT_SECRET', '')
+HYDRA_TOKEN_ENDPOINT = os.environ.get('HYDRA_TOKEN_ENDPOINT', '')
+HYDRA_CONSENT_REQUESTS_ENDPOINT = os.environ.get('HYDRA_CONSENT_REQUESTS_ENDPOINT', '')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = os.environ.get('DJANGO_STATIC_ROOT', os.path.join(BASE_DIR, 'build', 'static'))

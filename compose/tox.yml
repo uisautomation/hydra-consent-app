@@ -1,0 +1,36 @@
+# docker-compose file for running the test suite
+version: '3.2'
+services:
+  tox:
+    build:
+      context: ..
+      dockerfile: ./Dockerfile
+    command: ["tox"]
+    depends_on:
+      - "tox-db"
+    # Mount the local directory inside the container as a volume to allow local
+    # changes to be reflected without having to re-build the container.
+    volumes:
+      - type: bind
+        source: ../
+        target: /usr/src/app
+        read_only: true
+      - tox-data:/tmp/tox-data
+    env_file:
+      - base.env
+      - tox.env
+
+  tox-db:
+    image: postgres
+    env_file:
+      - base.env
+    volumes:
+      - tox-postgres-data-local:/var/lib/postgresql/data
+      - tox-postgres-backup-local:/backups
+
+volumes:
+  # A persistent volume for tox to store its stuff. This allows caching of
+  # virtualenvs between runs.
+  tox-data:
+  tox-postgres-data-local:
+  tox-postgres-backup-local:

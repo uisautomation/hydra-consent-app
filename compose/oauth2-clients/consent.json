@@ -1,0 +1,8 @@
+{
+  "id": "consent",
+  "client_name": "consent",
+  "client_secret": "secret",
+  "grant_types": ["client_credentials"],
+  "response_types": ["token"],
+  "scope": "hydra.consent"
+}

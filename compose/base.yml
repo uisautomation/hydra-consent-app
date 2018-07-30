@@ -1,0 +1,49 @@
+# docker-compose file for services common to all environments
+version: '3.2'
+
+services:
+  # The Hydra OAuth2 server
+  hydra:
+    image: oryd/hydra:v0.11.12-alpine
+    entrypoint: ["/tmp/start-hydra.sh"]
+    ports:
+      - "4444:4444"
+      - "4445:4445"  # For create-token.sh example
+    env_file:
+      - hydra.env
+    depends_on:
+      - hydra-db
+    volumes:
+      - type: bind
+        source: ./start-hydra.sh
+        target: /tmp/start-hydra.sh
+        read_only: true
+
+  # Ensure all the Hydra clients
+  hydra-clients:
+    image: oryd/hydra:v0.11.12-alpine
+    entrypoint: ["/tmp/compose/ensure-oauth2-clients.sh"]
+    depends_on:
+      - hydra
+    env_file:
+      - hydra.env
+    volumes:
+      # We use a volume mount here to avoid having to copy the scripts
+      # individually.
+      - type: bind
+        source: ./
+        target: /tmp/compose/
+        read_only: true
+
+  # A database for Hydra
+  hydra-db:
+    image: postgres
+    env_file:
+      - hydra.env
+    volumes:
+      - hydra-postgres-data-local:/var/lib/postgresql/data
+      - hydra-postgres-backup-local:/backups
+
+volumes:
+  hydra-postgres-data-local:
+  hydra-postgres-backup-local:

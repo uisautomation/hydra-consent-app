@@ -1,0 +1,39 @@
+# docker-compose configuration for running the development web application
+version: '3.2'
+
+services:
+  development-app:
+    build:
+      context: ..
+      dockerfile: compose/Dockerfile
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - "development-db"
+      - "hydra"
+      - "hydra-clients"
+    # For devserver, mount the local directory inside the container as a volume
+    # to allow local changes to be reflected without having to re-build the
+    # container.
+    volumes:
+      - type: bind
+        source: ../
+        target: /usr/src/app
+        read_only: true
+    env_file:
+      - base.env
+      - development.env
+
+  development-db:
+    image: postgres
+    env_file:
+      - base.env
+    volumes:
+      - development-postgres-data-local:/var/lib/postgresql/data
+      - development-postgres-backup-local:/backups
+
+volumes:
+  development-postgres-data-local:
+  development-postgres-backup-local:
