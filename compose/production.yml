@@ -1,0 +1,49 @@
+# docker-compose configuration for running the production web application
+version: '3.2'
+
+services:
+  production-app:
+    build:
+      context: ..
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - "production-db"
+      - "production-migrate"
+      - "hydra"
+      - "hydra-clients"
+    env_file:
+      - base.env
+      - production.env
+
+  production-migrate:
+    build:
+      context: ..
+    entrypoint: ["sh", "-c"]
+    command: ["apk add --no-cache bash && /tmp/compose/wait-for-it.sh production-db:5432 -- ./manage.py migrate"]
+    depends_on:
+      - "production-db"
+      - "hydra"
+      - "hydra-clients"
+    env_file:
+      - base.env
+      - production.env
+    volumes:
+      - type: bind
+        source: ./
+        target: /tmp/compose/
+        read_only: true
+
+  production-db:
+    image: postgres
+    env_file:
+      - base.env
+    volumes:
+      - production-postgres-data-local:/var/lib/postgresql/data
+      - production-postgres-backup-local:/backups
+
+volumes:
+  production-postgres-data-local:
+  production-postgres-backup-local:

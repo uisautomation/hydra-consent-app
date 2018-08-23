@@ -7,13 +7,9 @@ tokens.
 Create clients
 ``````````````
 
-Make sure you've created the appropriate OAuth2 clients via:
-
-.. code-block:: bash
-
-    $ ./scripts/create-clients.sh
-
-This will create two OAuth2 clients:
+When starting the application via docker-compose, OAuth2 clients are
+automatically created from the definitions in the ``compose/oauth2-clients``
+directory. Two OAuth2 clients are configured:
 
 consent
     An OAuth2 client for the consent app itself which uses client credentials

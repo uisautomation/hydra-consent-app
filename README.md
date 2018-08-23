@@ -16,7 +16,7 @@ As a quick test, you can spin up the consent app and try issuing a token with
 the following:
 
 ```console
-$ docker-compose up devserver
+$ ./compose.sh development up -d
 ```
 
 Then, in another terminal:
@@ -24,3 +24,7 @@ Then, in another terminal:
 ```console
 $ ./scripts/create-token.sh
 ```
+
+## Running tests
+
+The test suite may be run using the ``tox.sh`` wrapper script.

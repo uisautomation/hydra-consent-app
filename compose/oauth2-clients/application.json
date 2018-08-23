@@ -1,0 +1,9 @@
+{
+  "id": "application",
+  "client_name": "Example application client",
+  "client_secret": "secret",
+  "grant_types": ["authorization_code"],
+  "response_types": ["token", "code"],
+  "scope": "example prompt:none",
+  "redirect_uris": ["http://localhost:4445/callback"]
+}

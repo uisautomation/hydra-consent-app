@@ -43,8 +43,3 @@ MIDDLEWARE = MIDDLEWARE + [  # noqa: F405
 ]
 
 STATIC_URL = '/static/'
-
-CONSENT_CLIENT_ID = 'hydraroot'
-CONSENT_CLIENT_SECRET = 'secret'
-HYDRA_TOKEN_ENDPOINT = 'http://hydra:4444/oauth2/token'
-HYDRA_CONSENT_REQUESTS_ENDPOINT = 'http://hydra:4444/oauth2/consent/requests/'
