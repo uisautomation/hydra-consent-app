@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Issuing tokens &mdash; ucamoauth2consent  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Developer’s guide" href="developer.html" />
+    <link rel="prev" title="Getting started" href="gettingstarted.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ucamoauth2consent
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Issuing tokens</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#create-clients">Create clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#issue-a-token">Issue a token</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-prompt-none-flow">The “prompt:none” flow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developer’s guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ucamoauth2consent.html">The ucamoauth2consent Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ravenconsent.html">The ravenconsent Application</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ucamoauth2consent</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Issuing tokens</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/tokens.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="issuing-tokens">
+<h1>Issuing tokens<a class="headerlink" href="#issuing-tokens" title="Permalink to this headline">¶</a></h1>
+<p>If you are running the consent app via docker-compose, you can try out granting
+tokens.</p>
+<div class="section" id="create-clients">
+<h2>Create clients<a class="headerlink" href="#create-clients" title="Permalink to this headline">¶</a></h2>
+<p>When starting the application via docker-compose, OAuth2 clients are
+automatically created from the definitions in the <code class="docutils literal notranslate"><span class="pre">compose/oauth2-clients</span></code>
+directory. Two OAuth2 clients are configured:</p>
+<dl class="docutils">
+<dt>consent</dt>
+<dd>An OAuth2 client for the consent app itself which uses client credentials
+for authorisation and can be granted the <code class="docutils literal notranslate"><span class="pre">hydra.consent</span></code> scope to perform
+user consent flow.</dd>
+<dt>application</dt>
+<dd>An example OAuth2 client for obtaining a token. This application is allowed
+to perform the authorisation code flow and can request the <code class="docutils literal notranslate"><span class="pre">example</span></code> and
+<code class="docutils literal notranslate"><span class="pre">prompt:none</span></code> scopes.</dd>
+</dl>
+</div>
+<div class="section" id="issue-a-token">
+<h2>Issue a token<a class="headerlink" href="#issue-a-token" title="Permalink to this headline">¶</a></h2>
+<p>The normal flow can be demonstrated via:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./scripts/create-token.sh example
+</pre></div>
+</div>
+<p>This will create an authorisation request for the <code class="docutils literal notranslate"><span class="pre">example</span></code> scope. The script
+prints a URL which you can paste into the browser (in a private browsing tab).
+The demo Raven login page will be shown and you can log in as a test user.</p>
+<p>Running the script a second time should issue the token immediately as your
+session will be saved in a browser cookie.</p>
+</div>
+<div class="section" id="the-prompt-none-flow">
+<h2>The “prompt:none” flow<a class="headerlink" href="#the-prompt-none-flow" title="Permalink to this headline">¶</a></h2>
+<p>As an extension to the usual flow, if you request the <code class="docutils literal notranslate"><span class="pre">prompt:none</span></code> scope, you
+will never be re-directed to the login page. Request a new token via:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./scripts/create-token.sh example,prompt:none
+</pre></div>
+</div>
+<p>Open a new private browsing tab and visit the URL shown. You should see an
+immediate rejection of the request. Requesting a token without <code class="docutils literal notranslate"><span class="pre">prompt:none</span></code>
+should result in the usual login box. After logging in once, further
+<code class="docutils literal notranslate"><span class="pre">prompt:none</span></code> requests should succeed.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="developer.html" class="btn btn-neutral float-right" title="Developer’s guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="gettingstarted.html" class="btn btn-neutral" title="Getting started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, University of Cambridge Information Services
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

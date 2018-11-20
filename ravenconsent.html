@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The ravenconsent Application &mdash; ucamoauth2consent  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="The ucamoauth2consent Project" href="ucamoauth2consent.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ucamoauth2consent
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tokens.html">Issuing tokens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developer’s guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ucamoauth2consent.html">The ucamoauth2consent Project</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The ravenconsent Application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ravenconsent.defaultsettings">Default settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ravenconsent.views">Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ravenconsent.urls">Default URL routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ravenconsent.apps">Application configuration</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ucamoauth2consent</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>The ravenconsent Application</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/ravenconsent.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-ravenconsent-application">
+<h1>The ravenconsent Application<a class="headerlink" href="#the-ravenconsent-application" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">ravenconsent</span></code> application provides an implementation of a Hydra
+consent app which uses Raven as the backend authenticator.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Add the ravenconsent application to your <code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code> configuration as usual.</p>
+</div>
+<div class="section" id="module-ravenconsent.defaultsettings">
+<span id="default-settings"></span><h2>Default settings<a class="headerlink" href="#module-ravenconsent.defaultsettings" title="Permalink to this headline">¶</a></h2>
+<p>Default settings values for the <code class="xref py py-mod docutils literal notranslate"><span class="pre">ravenconsent</span></code> application.</p>
+<dl class="data">
+<dt id="ravenconsent.defaultsettings.CONSENT_CLIENT_ID">
+<code class="descclassname">ravenconsent.defaultsettings.</code><code class="descname">CONSENT_CLIENT_ID</code><em class="property"> = None</em><a class="headerlink" href="#ravenconsent.defaultsettings.CONSENT_CLIENT_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>OAuth2 client id which the consent app uses to identify itself to the OAuth2 token introspection
+endpoint.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="ravenconsent.defaultsettings.CONSENT_CLIENT_SECRET">
+<code class="descclassname">ravenconsent.defaultsettings.</code><code class="descname">CONSENT_CLIENT_SECRET</code><em class="property"> = None</em><a class="headerlink" href="#ravenconsent.defaultsettings.CONSENT_CLIENT_SECRET" title="Permalink to this definition">¶</a></dt>
+<dd><p>OAuth2 client secret which the consent app uses to identify itself to the OAuth2 token
+introspection endpoint.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="ravenconsent.defaultsettings.CONSENT_PROMPT_NONE_SCOPE">
+<code class="descclassname">ravenconsent.defaultsettings.</code><code class="descname">CONSENT_PROMPT_NONE_SCOPE</code><em class="property"> = 'prompt:none'</em><a class="headerlink" href="#ravenconsent.defaultsettings.CONSENT_PROMPT_NONE_SCOPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Consent requests with this scope are either granted or denied based upon whether the user is
+authenticated or not and will not show the Raven login if the user is not currently authenticated.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="ravenconsent.defaultsettings.HYDRA_CONSENT_REQUESTS_ENDPOINT">
+<code class="descclassname">ravenconsent.defaultsettings.</code><code class="descname">HYDRA_CONSENT_REQUESTS_ENDPOINT</code><em class="property"> = None</em><a class="headerlink" href="#ravenconsent.defaultsettings.HYDRA_CONSENT_REQUESTS_ENDPOINT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Endpoint which forms the base URL for consent requests. For example, if hydra is installed at
+<code class="docutils literal notranslate"><span class="pre">http://hydra.invalid/</span></code>, this should be <code class="docutils literal notranslate"><span class="pre">http://hydra.invalid/oauth2/consent/requests/</span></code>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="ravenconsent.defaultsettings.HYDRA_TOKEN_ENDPOINT">
+<code class="descclassname">ravenconsent.defaultsettings.</code><code class="descname">HYDRA_TOKEN_ENDPOINT</code><em class="property"> = None</em><a class="headerlink" href="#ravenconsent.defaultsettings.HYDRA_TOKEN_ENDPOINT" title="Permalink to this definition">¶</a></dt>
+<dd><p>URL of the OAuth2 token endpoint the API server uses to request an authorisation token to perform
+OAuth2 token introspection.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="ravenconsent.defaultsettings.SUBJECT_SCHEME">
+<code class="descclassname">ravenconsent.defaultsettings.</code><code class="descname">SUBJECT_SCHEME</code><em class="property"> = 'mock'</em><a class="headerlink" href="#ravenconsent.defaultsettings.SUBJECT_SCHEME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scheme used to namespace the identifiers returned by Raven. For production this should be “crsid”.
+For development/test use “mock”.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ravenconsent.views">
+<span id="views"></span><h2>Views<a class="headerlink" href="#module-ravenconsent.views" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="ravenconsent.views.consent">
+<code class="descclassname">ravenconsent.views.</code><code class="descname">consent</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#ravenconsent.views.consent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle consent flow from hydra.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ravenconsent.views.healthz">
+<code class="descclassname">ravenconsent.views.</code><code class="descname">healthz</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#ravenconsent.views.healthz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lightweight “readiness” endpoint used to determine when the service is “up”.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ravenconsent.views.render_error">
+<code class="descclassname">ravenconsent.views.</code><code class="descname">render_error</code><span class="sig-paren">(</span><em>request</em>, <em>error</em>, <em>error_description</em><span class="sig-paren">)</span><a class="headerlink" href="#ravenconsent.views.render_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render error page based on error request.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ravenconsent.views.render_error_from_request">
+<code class="descclassname">ravenconsent.views.</code><code class="descname">render_error_from_request</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#ravenconsent.views.render_error_from_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render error page based on error request.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ravenconsent.urls">
+<span id="default-url-routing"></span><h2>Default URL routing<a class="headerlink" href="#module-ravenconsent.urls" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-ravenconsent.apps">
+<span id="application-configuration"></span><h2>Application configuration<a class="headerlink" href="#module-ravenconsent.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ravenconsent.apps.RavenConsentConfig">
+<em class="property">class </em><code class="descclassname">ravenconsent.apps.</code><code class="descname">RavenConsentConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="headerlink" href="#ravenconsent.apps.RavenConsentConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configuration for assets application.</p>
+<dl class="attribute">
+<dt id="ravenconsent.apps.RavenConsentConfig.name">
+<code class="descname">name</code><em class="property"> = 'ravenconsent'</em><a class="headerlink" href="#ravenconsent.apps.RavenConsentConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The short name for this application.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ravenconsent.apps.RavenConsentConfig.ready">
+<code class="descname">ready</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ravenconsent.apps.RavenConsentConfig.ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform application initialisation once the Django platform has been initialised.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ravenconsent.apps.RavenConsentConfig.verbose_name">
+<code class="descname">verbose_name</code><em class="property"> = 'Hydra Consent App using Raven'</em><a class="headerlink" href="#ravenconsent.apps.RavenConsentConfig.verbose_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The human-readable verbose name for this application.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="ucamoauth2consent.html" class="btn btn-neutral" title="The ucamoauth2consent Project" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, University of Cambridge Information Services
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
