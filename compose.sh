@@ -27,4 +27,4 @@ fi
 cd "$( dirname "${BASH_SOURCE[0]}")"
 
 set -x
-exec docker-compose --file compose/base.yml --file compose/${config}.yml $args
+exec docker-compose -p hydra-consent-app --file compose/base.yml --file compose/${config}.yml $args
