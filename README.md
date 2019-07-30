@@ -1,3 +1,5 @@
+Moved to https://gitlab.developers.cam.ac.uk/uis/devops/raven/hydra-consent-app
+
 # Hydra Consent App for the University of Cambridge
 
 [![Build Status](https://travis-ci.org/uisautomation/hydra-consent-app.svg?branch=master)](https://travis-ci.org/uisautomation/hydra-consent-app)
